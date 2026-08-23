@@ -15,5 +15,12 @@ export const Route = createFileRoute('/')({
 })
 
 function IndexPage() {
-  return <main aria-label="Empty page" />
+  return (
+    <main className="flex min-h-screen flex-col items-center justify-center gap-2 px-6 text-center">
+      <h1 className="text-2xl font-semibold tracking-tight">Empty Page Project</h1>
+      <p className="text-sm text-neutral-500">
+        Your blank canvas is ready. Ask for your first feature to get started.
+      </p>
+    </main>
+  )
 }
