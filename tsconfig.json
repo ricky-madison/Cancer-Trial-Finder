@@ -31,12 +31,5 @@
     },
     "noEmit": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/.server/**/*.ts",
-    "**/.server/**/*.tsx",
-    "**/.client/**/*.ts",
-    "**/.client/**/*.tsx"
-  ]
+  "include": ["app/**/*.ts", "app/**/*.tsx", "load-context.ts", "worker-configuration.d.ts"]
 }
