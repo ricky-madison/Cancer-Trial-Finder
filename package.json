@@ -7,8 +7,7 @@
   "type": "module",
   "version": "1.0.0",
   "author": {
-    "name": "bolt.diy team",
-    "email": "maintainers@bolt.diy"
+    "name": "AGS Technologies"
   },
   "scripts": {
     "dev": "vite --port 8080",
