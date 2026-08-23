@@ -19,6 +19,15 @@ export default defineConfig((config) => {
     build: {
       target: 'esnext',
     },
+    resolve: {
+      dedupe: ['react', 'react-dom'],
+    },
+    ssr: {
+      // Bundle React through Vite so SSR uses the same React instance as the app.
+      // Externalizing react-dom/server made it load a separate React copy, which
+      // crashed with "Cannot read properties of undefined (reading 'ReactCurrentDispatcher')".
+      noExternal: ['react', 'react-dom'],
+    },
     plugins: [
       nodePolyfills({
         include: ['buffer', 'process', 'util', 'stream'],
