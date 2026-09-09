@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Trial Finder — Clinical Trial Matching</title>
+<meta name="description" content="Find recruiting clinical trials on ClinicalTrials.gov that fit your diagnosis, biomarkers, and location." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <span class="wordmark">Trial Finder</span>
+    <span class="site-header__tag">Search ClinicalTrials.gov by patient profile</span>
+  </div>
+</header>
+
+<main class="layout" id="app">
+
+  <!-- ============ WIZARD VIEW ============ -->
+  <section id="wizard-view" class="wizard">
+
+    <nav class="rail" aria-label="Form progress">
+      <ol class="rail__steps" id="rail-steps">
+        <li data-step="1"><span class="rail__num">1</span><span>About you</span></li>
+        <li data-step="2"><span class="rail__num">2</span><span>Diagnosis</span></li>
+        <li data-step="3"><span class="rail__num">3</span><span>Biomarkers</span></li>
+        <li data-step="4"><span class="rail__num">4</span><span>Treatment history</span></li>
+        <li data-step="5"><span class="rail__num">5</span><span>Labs &amp; organ function</span></li>
+        <li data-step="6"><span class="rail__num">6</span><span>Other health info</span></li>
+      </ol>
+      <div class="rail__completeness">
+        <div class="rail__completeness-label">Profile completeness</div>
+        <div class="meter"><div class="meter__fill" id="completeness-fill"></div></div>
+        <div class="rail__completeness-value" id="completeness-value">0%</div>
+      </div>
+    </nav>
+
+    <form class="panel" id="trial-form" novalidate>
+
+      <!-- STEP 1 -->
+      <fieldset class="step" data-step="1">
+        <legend>About you</legend>
+        <p class="step__hint">Basic eligibility fields most trials screen on first.</p>
+        <div class="grid-2">
+          <label>Age (years)
+            <input type="number" name="age" min="0" max="120" required />
+          </label>
+          <label>Sex at birth
+            <select name="sexAtBirth" required>
+              <option value="">Select…</option>
+              <option value="FEMALE">Female</option>
+              <option value="MALE">Male</option>
+            </select>
+          </label>
+          <label>Weight (kg) <span class="opt">optional</span>
+            <input type="number" name="weightKg" min="0" step="0.1" />
+          </label>
+          <label>Height (cm) <span class="opt">optional</span>
+            <input type="number" name="heightCm" min="0" step="0.1" />
+          </label>
+          <label>Country
+            <select name="country" id="country-select" required></select>
+          </label>
+          <label>State / Province
+            <input type="text" name="state" id="state-input" list="us-states" />
+            <datalist id="us-states"></datalist>
+          </label>
+          <label>ZIP / Postal code
+            <input type="text" name="zip" autocomplete="postal-code" />
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- STEP 2 -->
+      <fieldset class="step" data-step="2" hidden>
+        <legend>The diagnosis</legend>
+        <p class="step__hint">This drives the condition search — the more specific, the better the results.</p>
+        <label>Primary diagnosis
+          <input type="text" name="conditionText" list="conditions-list" placeholder="e.g. Non-small cell lung cancer" required />
+          <datalist id="conditions-list"></datalist>
+        </label>
+        <div class="grid-2">
+          <label>ICD-10 code <span class="opt">optional</span>
+            <input type="text" name="icd10" placeholder="e.g. C34.9" />
+          </label>
+          <label>Histologic subtype <span class="opt">optional</span>
+            <input type="text" name="histology" list="histology-list" />
+            <datalist id="histology-list"></datalist>
+          </label>
+          <label>T (tumor) <span class="opt">optional</span>
+            <select name="t"><option value="">—</option><option>TX</option><option>T0</option><option>T1</option><option>T2</option><option>T3</option><option>T4</option></select>
+          </label>
+          <label>N (nodes) <span class="opt">optional</span>
+            <select name="n"><option value="">—</option><option>NX</option><option>N0</option><option>N1</option><option>N2</option><option>N3</option></select>
+          </label>
+          <label>M (metastasis) <span class="opt">optional</span>
+            <select name="m"><option value="">—</option><option>MX</option><option>M0</option><option>M1a</option><option>M1b</option><option>M1c</option></select>
+          </label>
+          <label>Date of initial diagnosis <span class="opt">optional</span>
+            <input type="date" name="diagnosisDate" />
+          </label>
+        </div>
+        <fieldset class="checkbox-group">
+          <legend class="checkbox-group__legend">Current metastatic sites <span class="opt">optional</span></legend>
+          <div class="checkbox-grid" id="mets-sites"></div>
+        </fieldset>
+      </fieldset>
+
+      <!-- STEP 3 -->
+      <fieldset class="step" data-step="3" hidden>
+        <legend>Genomic &amp; biomarker profile</legend>
+        <p class="step__hint">Only fill in what you already know from pathology or NGS reports — leave the rest as unknown.</p>
+        <div class="biomarker-grid" id="biomarker-grid"></div>
+        <div class="grid-2">
+          <label>MSI / MMR status
+            <select name="msiStatus">
+              <option value="">Unknown</option>
+              <option>MSS</option><option>MSI-High</option><option>MSI-Low</option>
+              <option>dMMR</option><option>pMMR</option>
+            </select>
+          </label>
+          <label>Tumor mutational burden (TMB)
+            <select name="tmb"><option value="">Unknown</option><option>High</option><option>Low</option></select>
+          </label>
+          <label>PD-L1 (CPS or TPS %) <span class="opt">optional</span>
+            <input type="text" name="pdl1" placeholder="e.g. TPS 60%" />
+          </label>
+          <label>ER status <span class="opt">optional</span>
+            <select name="erStatus"><option value="">N/A</option><option>Positive</option><option>Negative</option></select>
+          </label>
+          <label>PR status <span class="opt">optional</span>
+            <select name="prStatus"><option value="">N/A</option><option>Positive</option><option>Negative</option></select>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- STEP 4 -->
+      <fieldset class="step" data-step="4" hidden>
+        <legend>Treatment history</legend>
+        <p class="step__hint">Trials often require patients to have already tried — or failed — specific standard-of-care lines.</p>
+        <label>Prior systemic therapies
+          <div class="tag-input" data-tag-field="priorDrugs">
+            <input type="text" placeholder="Type a drug name and press Enter" />
+          </div>
+          <div class="chip-list" id="prior-drugs-chips"></div>
+        </label>
+        <div class="grid-2">
+          <label>Best response to most recent therapy
+            <select name="bestResponse" id="best-response-select"></select>
+          </label>
+          <label>Date of last treatment cycle <span class="opt">optional</span>
+            <input type="date" name="lastTreatmentDate" />
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- STEP 5 -->
+      <fieldset class="step" data-step="5" hidden>
+        <legend>Labs &amp; organ function</legend>
+        <p class="step__hint">
+          Most published trial listings don't include exact numeric cutoffs, so these values aren't
+          used to filter results. They're compiled into your printable summary so you and your
+          oncologist can check them against a trial's full protocol quickly.
+        </p>
+        <div class="grid-3">
+          <label>eGFR (mL/min/1.73m²)<input type="number" name="egfr" /></label>
+          <label>AST (U/L)<input type="number" name="ast" /></label>
+          <label>ALT (U/L)<input type="number" name="alt" /></label>
+          <label>Total bilirubin (mg/dL)<input type="number" step="0.1" name="bilirubin" /></label>
+          <label>ANC (/µL)<input type="number" name="anc" /></label>
+          <label>Platelets (/µL)<input type="number" name="platelets" /></label>
+          <label>Hemoglobin (g/dL)<input type="number" step="0.1" name="hemoglobin" /></label>
+          <label>QTc (ms)<input type="number" name="qtc" /></label>
+          <label>G6PD status
+            <select name="g6pd"><option value="">Unknown</option><option>Normal</option><option>Deficient</option></select>
+          </label>
+        </div>
+      </fieldset>
+
+      <!-- STEP 6 -->
+      <fieldset class="step" data-step="6" hidden>
+        <legend>Other health information</legend>
+        <fieldset class="checkbox-group">
+          <legend class="checkbox-group__legend">Comorbidities <span class="opt">optional</span></legend>
+          <div class="checkbox-grid" id="comorbidities-grid"></div>
+        </fieldset>
+        <label>Current medications <span class="opt">optional</span>
+          <div class="tag-input" data-tag-field="medications">
+            <input type="text" placeholder="Type a medication and press Enter" />
+          </div>
+          <div class="chip-list" id="medications-chips"></div>
+        </label>
+
+        <div class="consent-box">
+          <label class="consent-box__row">
+            <input type="checkbox" name="consent" id="consent-checkbox" required />
+            <span>I understand this tool searches published ClinicalTrials.gov listings for informational
+            purposes only. It does not replace my oncologist's medical judgment, and I will discuss any
+            trial with my treating physician before pursuing enrollment.</span>
+          </label>
+          <label class="consent-box__row">
+            <input type="checkbox" name="includeNotYetRecruiting" id="include-nyr-checkbox" />
+            <span>Also include trials that are approved but not yet recruiting</span>
+          </label>
+        </div>
+      </fieldset>
+
+      <div class="step-nav">
+        <button type="button" id="btn-back" class="btn btn--ghost">Back</button>
+        <button type="button" id="btn-next" class="btn btn--primary">Continue</button>
+        <button type="submit" id="btn-submit" class="btn btn--primary" hidden>Find trials</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- ============ RESULTS VIEW ============ -->
+  <section id="results-view" class="results" hidden>
+    <div class="results__header">
+      <button type="button" id="btn-refine" class="btn btn--ghost">← Refine profile</button>
+      <h1 id="results-summary"></h1>
+      <p id="results-subtext" class="muted"></p>
+    </div>
+
+    <div id="results-status" class="results__status" hidden></div>
+
+    <div id="results-list" class="results__list"></div>
+
+    <div class="results__footer">
+      <button type="button" id="btn-download-pdf" class="btn btn--accent">Download discussion guide (PDF)</button>
+      <p class="muted small">
+        This list is a research aid built from ClinicalTrials.gov's public data — not a clinical
+        eligibility determination. Confirm every detail with the study site and your oncologist.
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Data from the public <a href="https://clinicaltrials.gov/" target="_blank" rel="noopener">ClinicalTrials.gov</a> registry, U.S. National Library of Medicine. This tool is not affiliated with ClinicalTrials.gov or the NLM.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
