@@ -1,17 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Trial Finder — Clinical Trial Matching</title>
-<meta name="description" content="Find recruiting clinical trials on ClinicalTrials.gov that fit your diagnosis, biomarkers, and location." />
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/styles.css" />
-</head>
-<body>
-
+export const APP_MARKUP = `
 <header class="site-header">
   <div class="site-header__inner">
     <span class="wordmark">Trial Finder</span>
@@ -244,8 +231,4 @@
 <footer class="site-footer">
   <p>Data from the public <a href="https://clinicaltrials.gov/" target="_blank" rel="noopener">ClinicalTrials.gov</a> registry, U.S. National Library of Medicine. This tool is not affiliated with ClinicalTrials.gov or the NLM.</p>
 </footer>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script type="module" src="js/app.js"></script>
-</body>
-</html>
+`;
