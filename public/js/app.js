@@ -267,7 +267,7 @@ function renderResults(profile, eligible, excludedCount, totalCount) {
       : 'No trials matched this profile';
 
   const subParts = [];
-  subParts.push(`Searched ${totalCount} ${totalCount === 1 ? 'result' : 'results'} from ClinicalTrials.gov`);
+  subParts.push(`Searched ${totalCount} matching ${totalCount === 1 ? 'study' : 'studies'} worldwide on ClinicalTrials.gov`);
   if (excludedCount) subParts.push(`${excludedCount} set aside on age/sex criteria`);
   document.getElementById('results-subtext').textContent = subParts.join(' — ');
 
@@ -351,18 +351,14 @@ form.addEventListener('submit', async (e) => {
       ...profile.biomarkers.positiveMarkers.map((m) => m.searchTerms[0])
     ].filter(Boolean).join(' ');
 
-    const locationText = !geo
-      ? [profile.demographics.state, profile.demographics.country].filter(Boolean).join(' ')
-      : '';
-
+    // Worldwide by design: no country/state/radius filter is sent to the API,
+    // so trials from every country are returned. The patient's coordinates are
+    // used only to rank nearby sites higher and to show distances.
     const { studies, totalCount } = await searchTrials({
       condition: profile.diagnosis.conditionText,
       termKeywords,
-      locationText,
-      geo,
-      radiusMiles: 200,
       includeNotYetRecruiting: profile.includeNotYetRecruiting,
-      pageSize: 50
+      pageSize: 200
     });
 
     const { eligible, excluded } = rankTrials(studies, profile, geo);

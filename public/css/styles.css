@@ -1,21 +1,21 @@
 /* ---------- Tokens ---------- */
 :root {
-  --ink: #16241F;
-  --paper: #F3F4EF;
+  --ink: #12212E;
+  --paper: #F1F5F9;
   --panel: #FFFFFF;
-  --primary: #1F4B46;
-  --primary-dark: #14332F;
-  --primary-tint: #DCE9E6;
-  --accent: #C77A34;
-  --accent-dark: #A2621F;
-  --danger: #B23A3A;
-  --danger-tint: #F4E1DF;
-  --success: #4C7A6B;
-  --success-tint: #E1EAE5;
-  --line: #DAD8CC;
-  --muted: #5C665F;
+  --primary: #14608C;
+  --primary-dark: #0D4463;
+  --primary-tint: #DCEBF5;
+  --accent: #0E9384;
+  --accent-dark: #0A7167;
+  --danger: #B42318;
+  --danger-tint: #FDE4E1;
+  --success: #12735C;
+  --success-tint: #DDF2EA;
+  --line: #D5DEE6;
+  --muted: #5A6B7A;
 
-  --font-display: "Source Serif 4", Georgia, serif;
+  --font-display: "IBM Plex Serif", Georgia, serif;
   --font-body: "IBM Plex Sans", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 
