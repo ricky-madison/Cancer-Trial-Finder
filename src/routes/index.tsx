@@ -1,60 +1,57 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
-import { APP_MARKUP } from '../markup'
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import HeroSection from "../sections/HeroSection";
+import PlatformSection from "../sections/PlatformSection";
+import MutationSearchSection from "../sections/MutationSearchSection";
+import AnalysisSection from "../sections/AnalysisSection";
+import PipelineSection from "../sections/PipelineSection";
+import FooterSection from "../sections/FooterSection";
 
-const TITLE = 'Trial Finder — Match a patient profile to global cancer trials'
-const DESC =
-  'Search every recruiting study on ClinicalTrials.gov worldwide by diagnosis, biomarkers, treatment history and labs, and export a discussion guide for your oncologist.'
+gsap.registerPlugin(ScrollTrigger);
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: TITLE },
-      { name: 'description', content: DESC },
-      { property: 'og:title', content: TITLE },
-      { property: 'og:description', content: DESC },
-      { property: 'og:type', content: 'website' },
-      { name: 'twitter:card', content: 'summary' },
-    ],
-    links: [
-      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap',
-      },
-      { rel: 'stylesheet', href: '/css/styles.css' },
+      { title: "p53 Druggability Engine" },
+      { name: "description", content: "Explore p53 mutations, druggability analysis, and discovery pipelines." },
+      { property: "og:title", content: "p53 Druggability Engine" },
+      { property: "og:description", content: "Explore p53 mutations, druggability analysis, and discovery pipelines." },
     ],
   }),
-  component: IndexPage,
-})
+  component: Index,
+});
 
-function loadScript(src: string, type?: string) {
-  return new Promise<void>((resolve, reject) => {
-    if (document.querySelector(`script[data-tf="${src}"]`)) return resolve()
-    const el = document.createElement('script')
-    el.src = src
-    el.dataset.tf = src
-    if (type) el.type = type
-    el.onload = () => resolve()
-    el.onerror = () => reject(new Error(`Failed to load ${src}`))
-    document.body.appendChild(el)
-  })
-}
-
-function IndexPage() {
+function Index() {
   useEffect(() => {
-    let cancelled = false
-    ;(async () => {
-      await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js').catch(
-        () => undefined,
-      )
-      if (!cancelled) await loadScript('/js/app.js', 'module').catch(() => undefined)
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [])
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest('a[href^="#"]');
+      if (anchor) {
+        e.preventDefault();
+        const href = anchor.getAttribute("href");
+        if (href) {
+          const element = document.querySelector(href);
+          if (element) element.scrollIntoView({ behavior: "smooth" });
+        }
+      }
+    };
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, []);
 
-  return <div dangerouslySetInnerHTML={{ __html: APP_MARKUP }} />
+  return (
+    <div className="relative min-h-screen bg-[#050B14] text-[#F8FAFC] overflow-x-hidden">
+      <div className="fixed inset-0 grid-scan opacity-20 pointer-events-none" style={{ zIndex: 0 }} />
+      <main className="relative" style={{ zIndex: 1 }}>
+        <HeroSection />
+        <PlatformSection />
+        <MutationSearchSection />
+        <AnalysisSection />
+        <PipelineSection />
+        <FooterSection />
+      </main>
+    </div>
+  );
 }
