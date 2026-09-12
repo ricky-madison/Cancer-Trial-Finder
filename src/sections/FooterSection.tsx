@@ -1,4 +1,4 @@
-import { Atom, Github as GithubIcon, ExternalLink, Mail, Shield, FileText } from 'lucide-react';
+import { Atom, GitBranch as Github, ExternalLink, Mail, Shield, FileText } from 'lucide-react';
 
 export default function FooterSection() {
   return (
