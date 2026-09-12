@@ -1,8 +1,122 @@
 @import "tailwindcss";
 
+@theme {
+  --color-border: rgba(94, 234, 212, 0.15);
+  --color-background: #050b14;
+  --color-foreground: #f8fafc;
+  --color-panel: rgba(10, 22, 40, 0.6);
+  --color-clinical: #5eead4;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
 html,
 body,
 #root {
   min-height: 100%;
   margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #050b14;
+  color: #f8fafc;
+  -webkit-font-smoothing: antialiased;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+@utility font-mono-clinical {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@utility glass-panel {
+  backdrop-filter: blur(24px);
+  background-color: rgba(10, 22, 40, 0.6);
+  border: 1px solid rgba(94, 234, 212, 0.15);
+}
+
+@utility glass-panel-strong {
+  backdrop-filter: blur(40px);
+  background-color: rgba(10, 22, 40, 0.8);
+  border: 1px solid rgba(94, 234, 212, 0.2);
+}
+
+@utility text-gradient-cyan {
+  background-image: linear-gradient(to right, #5eead4, #06b6d4, #818cf8);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility glow-cyan {
+  box-shadow: 0px 10px 40px -10px rgba(6, 182, 212, 0.3);
+}
+
+@utility glow-cyan-strong {
+  box-shadow: 0px 0px 60px -10px rgba(94, 234, 212, 0.4);
+}
+
+@utility border-glow {
+  border: 1px solid rgba(94, 234, 212, 0.15);
+}
+
+@utility animate-pulse-slow {
+  animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@utility animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@utility grid-scan {
+  background-image:
+    linear-gradient(rgba(94, 234, 212, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 234, 212, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050b14;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(94, 234, 212, 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(94, 234, 212, 0.5);
 }
