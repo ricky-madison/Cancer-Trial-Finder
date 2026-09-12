@@ -1,4 +1,4 @@
-# Trial Finder
+# Cancer Trial Finder
 
 A patient-profile → clinical trial matching tool. You fill in a six-step
 profile (demographics, diagnosis, biomarkers, treatment history, labs,
